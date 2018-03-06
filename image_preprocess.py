@@ -1,19 +1,24 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Mar  6 12:51:49 2018
-
+@version 0.1.3
 @author: jtdut
 """
 
-''' Description Here '''
+''' An image preprocessor '''
 import SimpleITK as sitk
 import numpy as np
 
 
 class imagepreprocess():
     # Object accepts the path of the MHA file to be extracted
-    def __init__(self,path):
-        self.__img = sitk.ReadImage(path)
+    def __init__(self,image_array = None, path = None):
+        if(image_array == None and not path == None):
+            self.__img = sitk.ReadImage(path)
+        elif(path == None and not image_array == None):
+            self.__img = sitk.GetImageFromArray(image_array)
+        else:
+            raise Exception('Either a 2D image array has to be provided or a path to the mha file has to be set. Both cannot be None')
         self.__img_top = self.__getTopView()
         self.__img_side = self.__getSideView()
         self.__img_back = self.__getBackView()
