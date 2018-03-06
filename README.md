@@ -1,1 +1,1 @@
-# BTS
+# Brain Tumor Segmentation
