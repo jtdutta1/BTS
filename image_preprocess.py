@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Mar  6 12:51:49 2018
-@version 0.1.3
+@version 0.2.1
 @author: jtdut
 """
 
-''' An image preprocessor '''
+""" An image preprocessor """
 import SimpleITK as sitk
 import numpy as np
 
 
 class imagepreprocess():
-    # Object accepts the path of the MHA file to be extracted
+    """ This class does some preprocessing for the image. These includes extracting different views
+    from the .mha file of a patient, returning the 3 different views of the MRI scans, create channels 
+    for passing to a CNN and also a normalization function."""
+    
     def __init__(self,image_array = None, path = None):
         if(image_array == None and not path == None):
             self._img = sitk.ReadImage(path)
@@ -24,11 +27,15 @@ class imagepreprocess():
         self._img_back = self.__getBackView()'''
         
     def _getTopView(self,slices = None):
-        ''' Returns a 3D numpy array of the top view
+        """ Returns the volumetric MRI scan of the brain from the top.
         
-        slices accepts a list of 2 integers.
-        The first number indicates the starting position and the second one indicates the last position.
-        '''
+        INPUT:-
+        slices(Optional): None or list. Accepts a list of 2 elements and returns the MRI scans between 
+                        these 2 ranges
+                        
+        OUTPUT:-
+        A 3-D numpy array with the volumetric top-side MRI scans of the brain.
+        """
         if(slices == None or len(slices) == 0):
             return sitk.GetArrayFromImage(self._img)
         else:
@@ -37,10 +44,18 @@ class imagepreprocess():
                 return sitk.GetArrayFromImage(self._img)[slices[0]:slices[1]]
             elif(len(slices)<2):
                 raise Exception('slices needs 2 parameters to return the custom MRI scan slices.')
+            else:
+                return sitk.GetArrayFromImage(self._img)[slices[0]:slices[1]]
     def _getSideView(self,slices = None):
-        ''' slices accepts a list of 2 integers.
-            The first number indicates the starting position and the second one indicates the last position.
-        '''
+        """ Returns the volumetric MRI scan of the brain from the side.
+        
+        INPUT:-
+        slices(Optional): None or list. Accepts a list of 2 elements and returns the MRI scans between 
+                        these 2 ranges
+                        
+        OUTPUT:-
+        A 3-D numpy array with the volumetric side MRI scans of the brain.
+        """
         img = []
         for e in range(-239,1):
             img.append(sitk.GetArrayFromImage(self._img)[:,:,e])
@@ -50,14 +65,23 @@ class imagepreprocess():
         else:
             if(len(slices)>2):
                 raise Exception('Warning!! There are more than 2 elements and we are considering the first 2')
+                print
                 return img[slices[0]:slices[1]]
             elif(len(slices)<2):
                 raise Exception('slices needs 2 parameters to return the custom MRI scan slices.')
+            else:
+                return img[slices[0]:slices[1]]
     
     def _getBackView(self,slices = None):
-        ''' slices accepts a list of 2 integers.
-            The first number indicates the starting position and the second one indicates the last position.
-        '''
+        """ Returns the volumetric MRI scan of the brain from the back.
+        
+        INPUT:-
+        slices(Optional): None or list. Accepts a list of 2 elements and returns the MRI scans between 
+                        these 2 ranges
+                        
+        OUTPUT:-
+        A 3-D numpy array with the volumetric backside MRI scans of the brain.
+        """
         img = []
         for e in range(-239,1):
             img.append(sitk.GetArrayFromImage(self._img)[:,e,:])
@@ -70,10 +94,20 @@ class imagepreprocess():
                 return img[slices[0]:slices[1]]
             elif(len(slices)<2):
                 raise Exception('slices needs 2 parameters to return the custom MRI scan slices.')
+            else:
+                return img[slices[0]:slices[1]]
                 
     def normalize(self,image_array):
-        '''Accepts a 2D numpy array and returns another 2D numpy array of the same size with normalized values.
-        '''
+        """ Reads and returns an image consisting of normalized values.
+        
+        INPUT:-
+        
+        image_array: A 2-D or 3-D numpy array representing the pixel values.
+        
+        OUTPUT:-
+        
+        The numpy array of the same shape with each value normalized between 0 and 1.
+        """
         arr_max = np.max(image_array); arr_min = np.min(image_array)
         l = []
         for e in image_array:
@@ -84,15 +118,38 @@ class imagepreprocess():
         return np.array(l)
     
     def create_channel(self,image_array):
-        ''' Accepts a 2D numpy array and returns a 3D numpy array
-        '''
-        l = []
-        for e in image_array:
-            l1 = []
-            for i in e:
-                l1.append([i])
-            l.append(l1)
-        return np.array(l)
+        """ Reads and returns an image consisting of a single color channel.
+        NOTE: Single color channel cannot be displayed using matplotlib.pyplot.imshow() method.
+        
+        INPUT:-
+        image_array: A 2-D or 3-D numpy array representing the pixel values.
+        
+        OUTPUT:-
+        The equivalent numpy array with a higher(1 extra) dimension.
+        """
+        dim = len(image_array.shape)
+        if(dim == 2):
+            l = []
+            for e in image_array:
+                l1 = []
+                for i in e:
+                    l1.append([i])
+                l.append(l1)
+            return np.array(l)
+        elif(dim == 3):
+            l = []
+            for i in image_array:
+                l1 = []
+                for j in i:
+                    l2 = []
+                    for k in j:
+                        l2.append([k])
+                    l1.append(l2)
+                l.append(l1)
+            return np.array(l)
+        else:
+            raise Exception('Expected 2 or 3 dimensions. Got '+dim+'.')
+        
     
     def __future_works(self):
         return
