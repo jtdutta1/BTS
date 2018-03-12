@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Mar  6 12:51:49 2018
-@version 0.2.1
+@version 0.2.4
 @author: jtdut
 """
 
@@ -18,8 +18,14 @@ class imagepreprocess():
     def __init__(self,image_array = None, path = None):
         if(image_array == None and not path == None):
             self._img = sitk.ReadImage(path)
+            self._img = sitk.CurvatureFlow(image1=self._img,
+                                    timeStep=0.125,                                       
+                                    numberOfIterations=5)
         elif(path == None and not image_array == None):
             self._img = sitk.GetImageFromArray(image_array)
+            self._img = sitk.CurvatureFlow(image1=self._img,
+                                    timeStep=0.125,                                       
+                                    numberOfIterations=5)
         else:
             raise Exception('Either a 2D image array has to be provided or a path to the mha file has to be set. Both cannot be None')
         '''self._img_top = self.__getTopView()
