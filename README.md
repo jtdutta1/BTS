@@ -8,6 +8,8 @@ A **U-Net** is a CNN architecture designed by Ronneberger et al. ([link](https:/
 
 ### Points about the data.
 
+We used the BRATS 2015 dataset available [here](www.braintumorsegmentation.org). The data has 220 HGG and 54 LGG brain scans. There are 4 types of brain scans that are provided (See image below).
+
 ![4-types of scans](/images/4-types-of-scan.jpg)
 
 This represents the 4 types of scans present in the dataset. From top-left clockwise:-
