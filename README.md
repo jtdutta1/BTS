@@ -29,3 +29,9 @@ We designed a Time-Distributed architecture which aids in using 3D images instea
 All the layers are Time-Distributed. 
 
 We achieved an **accuracy** of **86%** using a *Dice* based metric and *ADAM* based Gradient descent optimizer with a batch size of 1.
+
+## Project Members
+
+1. Debajyoti Chakraborty [github profile](https://github.com/urbancoder95)
+2. Debanjan Mondal [github profile](https://github.com/debanjan8)
+3. Jeet Dutta [github profile](https://github.com/jtdutta1)
