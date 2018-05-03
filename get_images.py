@@ -1,5 +1,4 @@
 import os
-#import warning
 import numpy as np
 from tqdm import tqdm
 import SimpleITK as sitk
