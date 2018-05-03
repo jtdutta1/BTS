@@ -1,4 +1,4 @@
-# Automatic Segmentation of Brain Tumours in Flair, T1 weighted, T2 weighted, T1 weighted with contrast enhancements volumetric MRI scans of the brain using Time-Distributed 2D Convolutional Neural Networks placed in an U-Net architecture.
+# Automatic Segmentation of Brain Tumours in Flair, T1 weighted, T2 weighted, T1 weighted with contrast enhancements volumetric MRI scans of the brain using a U-Net based Time-Distributed 2D Convolutional Neural Networks
 
 We design an unique way to train a U-Net on lower end Hardware. 
 
